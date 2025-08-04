@@ -1,6 +1,6 @@
 /* === CONFIGURATION === */
 const SUPABASE_URL = 'https://mcyppxpnkbonjvbojtaj.supabase.co';
-const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1jeXBweHBua2JvbmppdmJvamd0YWoiLCJyb2xlIjoiYW5vbiIsImlhdCI6MTc1NDMzMTkxOSwiZXhwIjoyMDY5OTA3OTE5fQ.3_jrKVB3aFGa8QD5QvfGEK1l2Exe8qu6gYe7AzJ1tqE';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1jeXBweHBua2Jvbmp2Ym9qdGFqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQzMzE5MTksImV4cCI6MjA2OTkwNzkxOX0.3_jrKVB3aFGa8QD5QvfGEK1l2Exe8qu6gYe7AzJ1tqE';
 
 // Initialize Supabase client - will be set when library loads
 let supabase = null;
