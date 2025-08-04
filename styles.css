@@ -1,3 +1,18 @@
+/* Color Theme */
+:root {
+  --bg-primary: #1E1E1E;       /* Main background */
+  --bg-secondary: #2D2D2D;     /* Cards/tables */
+  --text-primary: #E0E0E0;     /* Main text */
+  --text-secondary: #A0A0A0;   /* Secondary text */
+  --accent: #3498DB;           /* Primary action buttons */
+  --accent-hover: #2980B9;     /* Hover state */
+  --warning: #F39C12;          /* Due soon */
+  --danger: #E74C3C;           /* Overdue */
+  --success: #2ECC71;          /* Hired/passed */
+  --border: #3A3A3A;           /* Borders/divider */
+  --stale: #707070;            /* Stalled applicants */
+}
+
 * {
     margin: 0;
     padding: 0;
@@ -5,10 +20,11 @@
 }
 
 body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    background-color: #f5f7fa;
-    color: #333;
-    line-height: 1.6;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 16px;
+    line-height: 1.5;
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
 }
 
 /* Utility Classes */
@@ -30,23 +46,25 @@ body {
 }
 
 .login-card {
-    background: white;
+    background: var(--bg-secondary);
     padding: 40px;
     border-radius: 12px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    border: 1px solid var(--border);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
     width: 100%;
     max-width: 400px;
     text-align: center;
 }
 
 .login-card h1 {
-    color: #2563eb;
+    color: var(--accent);
     margin-bottom: 8px;
     font-size: 24px;
+    font-weight: 600;
 }
 
 .login-card p {
-    color: #666;
+    color: var(--text-secondary);
     margin-bottom: 32px;
 }
 
@@ -59,7 +77,7 @@ body {
     display: block;
     margin-bottom: 8px;
     font-weight: 500;
-    color: #374151;
+    color: var(--text-primary);
 }
 
 .form-group input,
@@ -67,9 +85,11 @@ body {
 .form-group textarea {
     width: 100%;
     padding: 12px;
-    border: 1px solid #d1d5db;
+    border: 1px solid var(--border);
     border-radius: 8px;
     font-size: 14px;
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
     transition: border-color 0.2s, box-shadow 0.2s;
 }
 
@@ -77,8 +97,12 @@ body {
 .form-group select:focus,
 .form-group textarea:focus {
     outline: none;
-    border-color: #2563eb;
-    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+}
+
+.form-group input::placeholder {
+    color: var(--text-secondary);
 }
 
 .form-row {
@@ -103,48 +127,55 @@ body {
 }
 
 .btn-primary {
-    background-color: #2563eb;
+    background-color: var(--accent);
     color: white;
+    border: 1px solid var(--accent);
 }
 
 .btn-primary:hover {
-    background-color: #1d4ed8;
+    background-color: var(--accent-hover);
+    border-color: var(--accent-hover);
 }
 
 .btn-secondary {
-    background-color: #6b7280;
-    color: white;
+    background-color: var(--bg-secondary);
+    color: var(--text-primary);
+    border: 1px solid var(--border);
 }
 
 .btn-secondary:hover {
-    background-color: #4b5563;
+    background-color: var(--border);
+    border-color: var(--text-secondary);
 }
 
 .btn-outline {
     background-color: transparent;
-    color: #6b7280;
-    border: 1px solid #d1d5db;
+    color: var(--text-secondary);
+    border: 1px solid var(--border);
 }
 
 .btn-outline:hover {
-    background-color: #f9fafb;
-    border-color: #9ca3af;
+    background-color: var(--bg-secondary);
+    border-color: var(--text-secondary);
+    color: var(--text-primary);
 }
 
 .btn-danger {
-    background-color: #dc2626;
+    background-color: var(--danger);
     color: white;
+    border: 1px solid var(--danger);
 }
 
 .btn-danger:hover {
-    background-color: #b91c1c;
+    background-color: #c0392b;
+    border-color: #c0392b;
 }
 
 .divider {
     margin: 24px 0;
     position: relative;
     text-align: center;
-    color: #9ca3af;
+    color: var(--text-secondary);
 }
 
 .divider::before {
@@ -154,11 +185,11 @@ body {
     left: 0;
     right: 0;
     height: 1px;
-    background-color: #e5e7eb;
+    background-color: var(--border);
 }
 
 .divider span {
-    background-color: white;
+    background-color: var(--bg-secondary);
     padding: 0 16px;
 }
 
@@ -170,21 +201,21 @@ body {
 }
 
 .message.success {
-    background-color: #d1fae5;
-    color: #065f46;
-    border: 1px solid #a7f3d0;
+    background-color: rgba(46, 204, 113, 0.1);
+    color: var(--success);
+    border: 1px solid rgba(46, 204, 113, 0.3);
 }
 
 .message.error {
-    background-color: #fee2e2;
-    color: #991b1b;
-    border: 1px solid #fca5a5;
+    background-color: rgba(231, 76, 60, 0.1);
+    color: var(--danger);
+    border: 1px solid rgba(231, 76, 60, 0.3);
 }
 
 /* Header */
 .header {
-    background: white;
-    border-bottom: 1px solid #e5e7eb;
+    background: var(--bg-secondary);
+    border-bottom: 1px solid var(--border);
     padding: 16px 0;
     position: sticky;
     top: 0;
@@ -201,8 +232,9 @@ body {
 }
 
 .header h1 {
-    color: #2563eb;
+    color: var(--accent);
     font-size: 20px;
+    font-weight: 600;
 }
 
 .header-actions {
@@ -221,10 +253,11 @@ body {
 }
 
 .card {
-    background: white;
+    background: var(--bg-secondary);
     padding: 24px;
     border-radius: 12px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    border: 1px solid var(--border);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
     display: flex;
     align-items: center;
     gap: 16px;
@@ -238,33 +271,34 @@ body {
     align-items: center;
     justify-content: center;
     font-size: 20px;
-    background-color: #dbeafe;
-    color: #2563eb;
+    background-color: rgba(52, 152, 219, 0.1);
+    color: var(--accent);
 }
 
 .card-icon.due {
-    background-color: #fef3c7;
-    color: #d97706;
+    background-color: rgba(243, 156, 18, 0.1);
+    color: var(--warning);
 }
 
 .card-icon.overdue {
-    background-color: #fee2e2;
-    color: #dc2626;
+    background-color: rgba(231, 76, 60, 0.1);
+    color: var(--danger);
 }
 
 .card-icon.stalled {
-    background-color: #f3f4f6;
-    color: #6b7280;
+    background-color: rgba(112, 112, 112, 0.1);
+    color: var(--stale);
 }
 
 .card-content h3 {
     font-size: 28px;
     font-weight: 700;
     margin-bottom: 4px;
+    color: var(--text-primary);
 }
 
 .card-content p {
-    color: #6b7280;
+    color: var(--text-secondary);
     font-size: 14px;
 }
 
@@ -299,9 +333,10 @@ body {
     max-width: 1200px;
     margin: 24px auto;
     padding: 0 24px;
-    background: white;
+    background: var(--bg-secondary);
     border-radius: 12px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    border: 1px solid var(--border);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
     overflow: hidden;
 }
 
@@ -314,22 +349,23 @@ body {
 .applicants-table td {
     padding: 16px;
     text-align: left;
-    border-bottom: 1px solid #f3f4f6;
+    border-bottom: 1px solid var(--border);
 }
 
 .applicants-table th {
-    background-color: #f9fafb;
+    background-color: var(--bg-primary);
     font-weight: 600;
-    color: #374151;
+    color: var(--text-primary);
     font-size: 14px;
 }
 
 .applicants-table td {
     font-size: 14px;
+    color: var(--text-primary);
 }
 
 .applicants-table tr:hover {
-    background-color: #f9fafb;
+    background-color: rgba(58, 58, 58, 0.3);
 }
 
 .status-badge {
@@ -340,23 +376,27 @@ body {
 }
 
 .status-ok {
-    background-color: #d1fae5;
-    color: #065f46;
+    background-color: rgba(46, 204, 113, 0.1);
+    color: var(--success);
+    border: 1px solid rgba(46, 204, 113, 0.3);
 }
 
 .status-due {
-    background-color: #fef3c7;
-    color: #92400e;
+    background-color: rgba(243, 156, 18, 0.1);
+    color: var(--warning);
+    border: 1px solid rgba(243, 156, 18, 0.3);
 }
 
 .status-overdue {
-    background-color: #fee2e2;
-    color: #991b1b;
+    background-color: rgba(231, 76, 60, 0.1);
+    color: var(--danger);
+    border: 1px solid rgba(231, 76, 60, 0.3);
 }
 
 .status-stalled {
-    background-color: #f3f4f6;
-    color: #4b5563;
+    background-color: rgba(112, 112, 112, 0.1);
+    color: var(--stale);
+    border: 1px solid rgba(112, 112, 112, 0.3);
 }
 
 .stage-badge {
@@ -364,8 +404,9 @@ body {
     border-radius: 6px;
     font-size: 12px;
     font-weight: 500;
-    background-color: #e5e7eb;
-    color: #374151;
+    background-color: var(--border);
+    color: var(--text-primary);
+    border: 1px solid var(--border);
 }
 
 .action-buttons {
@@ -382,17 +423,18 @@ body {
 .empty-state {
     text-align: center;
     padding: 60px 20px;
-    color: #6b7280;
+    color: var(--text-secondary);
 }
 
 .empty-state i {
     font-size: 48px;
     margin-bottom: 16px;
+    color: var(--text-secondary);
 }
 
 .empty-state h3 {
     margin-bottom: 8px;
-    color: #374151;
+    color: var(--text-primary);
 }
 
 /* Modal */
@@ -411,9 +453,10 @@ body {
 }
 
 .modal-content {
-    background: white;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
     border-radius: 12px;
-    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
     width: 100%;
     max-width: 800px;
     max-height: 90vh;
@@ -433,20 +476,22 @@ body {
 
 .modal-header h2 {
     font-size: 20px;
-    color: #111827;
+    color: var(--text-primary);
+    font-weight: 600;
 }
 
 .modal-close {
     background: none;
     border: none;
     font-size: 20px;
-    color: #6b7280;
+    color: var(--text-secondary);
     cursor: pointer;
     padding: 4px;
+    transition: color 0.2s;
 }
 
 .modal-close:hover {
-    color: #374151;
+    color: var(--text-primary);
 }
 
 .modal-body {
@@ -468,17 +513,19 @@ body {
 /* Stage History */
 #stageHistorySection {
     margin-top: 32px;
-    border-top: 1px solid #e5e7eb;
+    border-top: 1px solid var(--border);
     padding-top: 24px;
 }
 
 #stageHistorySection h3 {
     margin-bottom: 16px;
-    color: #111827;
+    color: var(--text-primary);
+    font-weight: 600;
 }
 
 .history-entry {
-    background-color: #f9fafb;
+    background-color: var(--bg-primary);
+    border: 1px solid var(--border);
     border-radius: 8px;
     padding: 16px;
     margin-bottom: 12px;
@@ -493,7 +540,7 @@ body {
 
 .history-stage {
     font-weight: 500;
-    color: #111827;
+    color: var(--text-primary);
 }
 
 .history-result {
@@ -501,36 +548,38 @@ body {
     border-radius: 4px;
     font-size: 12px;
     font-weight: 500;
-    background-color: #e5e7eb;
-    color: #374151;
+    background-color: var(--border);
+    color: var(--text-primary);
+    border: 1px solid var(--border);
 }
 
 .history-date {
     font-size: 12px;
-    color: #6b7280;
+    color: var(--text-secondary);
 }
 
 .history-comment {
-    color: #4b5563;
+    color: var(--text-primary);
     font-size: 14px;
 }
 
 .add-history {
     margin-top: 24px;
     padding-top: 16px;
-    border-top: 1px solid #e5e7eb;
+    border-top: 1px solid var(--border);
 }
 
 .add-history h4 {
     margin-bottom: 16px;
-    color: #111827;
+    color: var(--text-primary);
     font-size: 16px;
+    font-weight: 600;
 }
 
 .char-count {
     text-align: right;
     font-size: 12px;
-    color: #6b7280;
+    color: var(--text-secondary);
     margin-top: 4px;
 }
 
@@ -541,7 +590,7 @@ body {
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(255, 255, 255, 0.8);
+    background-color: rgba(30, 30, 30, 0.8);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -550,12 +599,16 @@ body {
 
 .loading-spinner {
     text-align: center;
-    color: #2563eb;
+    color: var(--accent);
 }
 
 .loading-spinner i {
     font-size: 32px;
     margin-bottom: 16px;
+}
+
+.loading-spinner p {
+    color: var(--text-primary);
 }
 
 /* Responsive Design */
@@ -606,14 +659,14 @@ body {
 
 /* Row Status Colors */
 .applicants-table tr.overdue {
-    background-color: #fef2f2 !important;
+    background-color: rgba(231, 76, 60, 0.05) !important;
 }
 
 .applicants-table tr.due {
-    background-color: #fffbeb !important;
+    background-color: rgba(243, 156, 18, 0.05) !important;
 }
 
 .applicants-table tr.stalled {
-    background-color: #f9fafb !important;
+    background-color: rgba(112, 112, 112, 0.05) !important;
     opacity: 0.8;
 }
