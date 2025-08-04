@@ -4,165 +4,198 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HR Recruitment Dashboard</title>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>👔</text></svg>">
+    <link rel="stylesheet" href="styles.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&family=JetBrains+Mono:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.29.0/feather.min.css" rel="stylesheet">
 </head>
 <body>
     <!-- Login Screen -->
-    <div id="loginScreen" class="screen">
+    <div id="loginScreen" class="login-screen">
         <div class="login-container">
-            <div class="login-card">
-                <h1><i class="fas fa-users"></i> HR Recruitment Dashboard</h1>
-                <p>Please sign in to access the dashboard</p>
-                <form id="loginForm">
-                    <div class="form-group">
-                        <label for="loginEmail">Email Address</label>
-                        <input type="email" id="loginEmail" required placeholder="Enter your email">
-                    </div>
-                    <div class="form-group">
-                        <label for="loginPassword">Password</label>
-                        <input type="password" id="loginPassword" required placeholder="Enter your password">
-                    </div>
-                    <button type="submit" class="btn btn-primary">
-                        <i class="fas fa-sign-in-alt"></i> Sign In
-                    </button>
-                </form>
-                <div class="divider">
-                    <span>or</span>
-                </div>
-                <button id="magicLinkBtn" class="btn btn-secondary">
-                    <i class="fas fa-magic"></i> Send Magic Link
-                </button>
-                <div id="loginMessage" class="message"></div>
+            <div class="login-header">
+                <h1>HR Recruitment Dashboard</h1>
+                <p>Sign in to access your recruitment pipeline</p>
             </div>
+            <form id="loginForm" class="login-form">
+                <div class="form-group">
+                    <label for="loginEmail">Email Address</label>
+                    <input type="email" id="loginEmail" required placeholder="Enter your email">
+                </div>
+                <div class="form-group">
+                    <label for="loginPassword">Password</label>
+                    <input type="password" id="loginPassword" required placeholder="Enter your password">
+                </div>
+                <button type="submit" id="loginBtn" class="btn btn-primary">
+                    <span class="btn-text">Sign In</span>
+                    <div class="spinner" style="display: none;"></div>
+                </button>
+            </form>
         </div>
     </div>
 
-    <!-- Dashboard Screen -->
-    <div id="dashboardScreen" class="screen hidden">
+    <!-- Main Dashboard -->
+    <div id="dashboard" class="dashboard" style="display: none;">
         <!-- Header -->
         <header class="header">
             <div class="header-content">
-                <h1><i class="fas fa-users"></i> HR Recruitment Dashboard</h1>
+                <h1>HR Recruitment Dashboard</h1>
                 <div class="header-actions">
-                    <button id="addApplicantBtn" class="btn btn-primary">
-                        <i class="fas fa-plus"></i> Add Applicant
-                    </button>
                     <button id="exportBtn" class="btn btn-secondary">
-                        <i class="fas fa-download"></i> Export Data
+                        <i data-feather="download"></i>
+                        Export Data
+                    </button>
+                    <button id="addApplicantBtn" class="btn btn-primary">
+                        <i data-feather="user-plus"></i>
+                        Add Applicant
                     </button>
                     <button id="logoutBtn" class="btn btn-outline">
-                        <i class="fas fa-sign-out-alt"></i> Logout
+                        <i data-feather="log-out"></i>
+                        Sign Out
                     </button>
                 </div>
             </div>
         </header>
 
         <!-- Summary Cards -->
-        <div class="summary-cards">
-            <div class="card">
-                <div class="card-icon">
-                    <i class="fas fa-users"></i>
+        <section class="summary-section">
+            <div class="summary-cards">
+                <div class="card summary-card">
+                    <div class="card-icon">
+                        <i data-feather="users"></i>
+                    </div>
+                    <div class="card-content">
+                        <h3 id="totalApplicants">0</h3>
+                        <p>Total Applicants</p>
+                    </div>
                 </div>
-                <div class="card-content">
-                    <h3 id="totalApplicants">0</h3>
-                    <p>Total Applicants</p>
+                <div class="card summary-card warning">
+                    <div class="card-icon">
+                        <i data-feather="clock"></i>
+                    </div>
+                    <div class="card-content">
+                        <h3 id="dueMeetings">0</h3>
+                        <p>Due Meetings</p>
+                    </div>
+                </div>
+                <div class="card summary-card danger">
+                    <div class="card-icon">
+                        <i data-feather="alert-triangle"></i>
+                    </div>
+                    <div class="card-content">
+                        <h3 id="overdueMeetings">0</h3>
+                        <p>Overdue Meetings</p>
+                    </div>
+                </div>
+                <div class="card summary-card stale">
+                    <div class="card-icon">
+                        <i data-feather="pause-circle"></i>
+                    </div>
+                    <div class="card-content">
+                        <h3 id="stalledApplicants">0</h3>
+                        <p>Stalled Applicants</p>
+                    </div>
                 </div>
             </div>
-            <div class="card">
-                <div class="card-icon due">
-                    <i class="fas fa-clock"></i>
-                </div>
-                <div class="card-content">
-                    <h3 id="dueMeetings">0</h3>
-                    <p>Due Meetings</p>
-                </div>
-            </div>
-            <div class="card">
-                <div class="card-icon overdue">
-                    <i class="fas fa-exclamation-triangle"></i>
-                </div>
-                <div class="card-content">
-                    <h3 id="overdueMeetings">0</h3>
-                    <p>Overdue Meetings</p>
-                </div>
-            </div>
-            <div class="card">
-                <div class="card-icon stalled">
-                    <i class="fas fa-pause"></i>
-                </div>
-                <div class="card-content">
-                    <h3 id="stalledApplicants">0</h3>
-                    <p>Stalled Applicants</p>
-                </div>
-            </div>
-        </div>
+        </section>
 
-        <!-- Filters -->
-        <div class="filters">
-            <div class="filter-group">
-                <input type="text" id="searchInput" placeholder="Search by name or email...">
-                <select id="stageFilter">
-                    <option value="">All Stages</option>
-                    <option value="challenge_email">Challenge Email</option>
-                    <option value="equipment_email">Equipment Email</option>
-                    <option value="first_interview">First Interview</option>
-                    <option value="sales_mock">Sales Mock</option>
-                    <option value="slack_mock">Slack Mock</option>
-                    <option value="hired">Hired</option>
-                    <option value="rejected">Rejected</option>
-                </select>
-                <select id="statusFilter">
-                    <option value="">All Status</option>
-                    <option value="due">Due</option>
-                    <option value="overdue">Overdue</option>
-                    <option value="stalled">Stalled</option>
-                </select>
+        <!-- Filters and Search -->
+        <section class="filters-section">
+            <div class="filters">
+                <div class="search-box">
+                    <i data-feather="search"></i>
+                    <input type="text" id="searchInput" placeholder="Search by name or email...">
+                </div>
+                <div class="filter-group">
+                    <select id="stageFilter">
+                        <option value="">All Stages</option>
+                        <option value="challenge_email">Challenge Email</option>
+                        <option value="equipment_email">Equipment Email</option>
+                        <option value="first_interview">First Interview</option>
+                        <option value="sales_mock">Sales Mock</option>
+                        <option value="slack_mock">Slack Mock</option>
+                        <option value="hired">Hired</option>
+                        <option value="rejected">Rejected</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <select id="statusFilter">
+                        <option value="">All Statuses</option>
+                        <option value="ok">OK</option>
+                        <option value="due">Due</option>
+                        <option value="overdue">Overdue</option>
+                        <option value="stalled">Stalled</option>
+                    </select>
+                </div>
+                <button id="clearFiltersBtn" class="btn btn-outline">
+                    <i data-feather="x"></i>
+                    Clear Filters
+                </button>
             </div>
-        </div>
+        </section>
 
         <!-- Applicants Table -->
-        <div class="table-container">
-            <table class="applicants-table">
-                <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Email</th>
-                        <th>US Name</th>
-                        <th>Current Stage</th>
-                        <th>Next Meeting</th>
-                        <th>Status</th>
-                        <th>Last Updated</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody id="applicantsTableBody">
-                    <!-- Dynamic content -->
-                </tbody>
-            </table>
-            <div id="emptyState" class="empty-state hidden">
-                <i class="fas fa-inbox"></i>
-                <h3>No applicants found</h3>
-                <p>Start by adding your first applicant to the system.</p>
+        <section class="table-section">
+            <div class="card">
+                <div class="table-header">
+                    <h2>Applicants</h2>
+                    <div class="table-actions">
+                        <button id="refreshBtn" class="btn btn-outline">
+                            <i data-feather="refresh-cw"></i>
+                            Refresh
+                        </button>
+                        <button id="clearAllBtn" class="btn btn-danger">
+                            <i data-feather="trash-2"></i>
+                            Clear All Data
+                        </button>
+                    </div>
+                </div>
+                <div class="table-container">
+                    <table id="applicantsTable" class="applicants-table">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>US Name</th>
+                                <th>Current Stage</th>
+                                <th>Next Meeting</th>
+                                <th>Status</th>
+                                <th>Last Updated</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="applicantsTableBody">
+                            <!-- Dynamic content -->
+                        </tbody>
+                    </table>
+                    <div id="emptyState" class="empty-state" style="display: none;">
+                        <i data-feather="inbox"></i>
+                        <h3>No Applicants Found</h3>
+                        <p>Start by adding your first applicant to the system.</p>
+                        <button class="btn btn-primary">
+                            <i data-feather="user-plus"></i>
+                            Add First Applicant
+                        </button>
+                    </div>
+                </div>
             </div>
-        </div>
+        </section>
     </div>
 
     <!-- Applicant Modal -->
-    <div id="applicantModal" class="modal hidden">
+    <div id="applicantModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
                 <h2 id="modalTitle">Add New Applicant</h2>
-                <button class="modal-close" id="closeModal">
-                    <i class="fas fa-times"></i>
+                <button class="modal-close" id="modalClose">
+                    <i data-feather="x"></i>
                 </button>
             </div>
             <div class="modal-body">
                 <form id="applicantForm">
-                    <div class="form-row">
+                    <div class="form-grid">
                         <div class="form-group">
                             <label for="fullName">Full Name *</label>
                             <input type="text" id="fullName" required>
@@ -171,102 +204,111 @@
                             <label for="email">Email *</label>
                             <input type="email" id="email" required>
                         </div>
-                    </div>
-                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="usName">US Name</label>
+                            <input type="text" id="usName">
+                        </div>
                         <div class="form-group">
                             <label for="dob">Date of Birth</label>
                             <input type="date" id="dob">
                         </div>
                         <div class="form-group">
-                            <label for="usName">US Name</label>
-                            <input type="text" id="usName">
+                            <label for="currentStage">Current Stage</label>
+                            <select id="currentStage">
+                                <option value="challenge_email">Challenge Email</option>
+                                <option value="equipment_email">Equipment Email</option>
+                                <option value="first_interview">First Interview</option>
+                                <option value="sales_mock">Sales Mock</option>
+                                <option value="slack_mock">Slack Mock</option>
+                                <option value="hired">Hired</option>
+                                <option value="rejected">Rejected</option>
+                            </select>
                         </div>
                     </div>
-                    <div class="form-group">
-                        <label for="currentStage">Current Stage</label>
-                        <select id="currentStage">
-                            <option value="challenge_email">Challenge Email</option>
-                            <option value="equipment_email">Equipment Email</option>
-                            <option value="first_interview">First Interview</option>
-                            <option value="sales_mock">Sales Mock</option>
-                            <option value="slack_mock">Slack Mock</option>
-                            <option value="hired">Hired</option>
-                            <option value="rejected">Rejected</option>
-                        </select>
+                    
+                    <div class="form-section">
+                        <h3>Interview Scheduling</h3>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="interviewFirstDate">First Interview</label>
+                                <input type="datetime-local" id="interviewFirstDate">
+                            </div>
+                            <div class="form-group">
+                                <label for="salesMockDate">Sales Mock</label>
+                                <input type="datetime-local" id="salesMockDate">
+                            </div>
+                            <div class="form-group">
+                                <label for="slackMockDate">Slack Mock</label>
+                                <input type="datetime-local" id="slackMockDate">
+                            </div>
+                        </div>
                     </div>
-                    <div class="form-row">
+
+                    <div class="form-section">
+                        <h3>Notes</h3>
                         <div class="form-group">
-                            <label for="interviewFirstDate">First Interview Date</label>
-                            <input type="datetime-local" id="interviewFirstDate">
-                        </div>
-                        <div class="form-group">
-                            <label for="salesMockDate">Sales Mock Date</label>
-                            <input type="datetime-local" id="salesMockDate">
+                            <label for="notes">Notes</label>
+                            <textarea id="notes" rows="4" placeholder="Add any relevant notes..."></textarea>
                         </div>
                     </div>
-                    <div class="form-group">
-                        <label for="slackMockDate">Slack Mock Date</label>
-                        <input type="datetime-local" id="slackMockDate">
-                    </div>
-                    <div class="form-group">
-                        <label for="notes">Notes</label>
-                        <textarea id="notes" rows="3"></textarea>
+
+                    <div class="form-section" id="historySection" style="display: none;">
+                        <h3>Stage History</h3>
+                        <div id="stageHistory" class="stage-history">
+                            <!-- Dynamic content -->
+                        </div>
+                        
+                        <div class="add-history">
+                            <h4>Add Stage History Entry</h4>
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label for="historyStage">Stage</label>
+                                    <select id="historyStage">
+                                        <option value="challenge_email">Challenge Email</option>
+                                        <option value="equipment_email">Equipment Email</option>
+                                        <option value="first_interview">First Interview</option>
+                                        <option value="sales_mock">Sales Mock</option>
+                                        <option value="slack_mock">Slack Mock</option>
+                                        <option value="hired">Hired</option>
+                                        <option value="rejected">Rejected</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="historyResult">Result</label>
+                                    <select id="historyResult">
+                                        <option value="Passed">Passed</option>
+                                        <option value="Failed">Failed</option>
+                                        <option value="Redo">Redo</option>
+                                        <option value="Fit">Fit</option>
+                                        <option value="NoFit">No Fit</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="historyComment">Comment (max 200 chars)</label>
+                                <textarea id="historyComment" maxlength="200" rows="3" placeholder="Add a comment..."></textarea>
+                                <div class="char-count">
+                                    <span id="commentCharCount">0</span>/200
+                                </div>
+                            </div>
+                            <button type="button" id="addHistoryBtn" class="btn btn-secondary">
+                                <i data-feather="plus"></i>
+                                Add History Entry
+                            </button>
+                        </div>
                     </div>
                 </form>
-
-                <!-- Stage History Section -->
-                <div id="stageHistorySection" class="hidden">
-                    <h3>Stage History</h3>
-                    <div id="stageHistoryList"></div>
-                    
-                    <!-- Add Stage History -->
-                    <div class="add-history">
-                        <h4>Add Stage History Entry</h4>
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="historyStage">Stage</label>
-                                <select id="historyStage">
-                                    <option value="challenge_email">Challenge Email</option>
-                                    <option value="equipment_email">Equipment Email</option>
-                                    <option value="first_interview">First Interview</option>
-                                    <option value="sales_mock">Sales Mock</option>
-                                    <option value="slack_mock">Slack Mock</option>
-                                    <option value="hired">Hired</option>
-                                    <option value="rejected">Rejected</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label for="historyResult">Result</label>
-                                <select id="historyResult">
-                                    <option value="Passed">Passed</option>
-                                    <option value="Failed">Failed</option>
-                                    <option value="Redo">Redo</option>
-                                    <option value="Fit">Fit</option>
-                                    <option value="NoFit">NoFit</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="historyComment">Comment (max 200 characters)</label>
-                            <textarea id="historyComment" maxlength="200" rows="2"></textarea>
-                            <div class="char-count">
-                                <span id="commentCharCount">0</span>/200
-                            </div>
-                        </div>
-                        <button type="button" id="addHistoryBtn" class="btn btn-secondary">
-                            <i class="fas fa-plus"></i> Add History Entry
-                        </button>
-                    </div>
-                </div>
             </div>
             <div class="modal-footer">
-                <button type="button" id="deleteApplicantBtn" class="btn btn-danger hidden">
-                    <i class="fas fa-trash"></i> Delete Applicant
+                <button type="button" id="deleteApplicantBtn" class="btn btn-danger" style="display: none;">
+                    <i data-feather="trash-2"></i>
+                    Delete Applicant
                 </button>
                 <div class="modal-actions">
                     <button type="button" id="cancelBtn" class="btn btn-outline">Cancel</button>
                     <button type="button" id="saveApplicantBtn" class="btn btn-primary">
-                        <i class="fas fa-save"></i> Save
+                        <span class="btn-text">Save Applicant</span>
+                        <div class="spinner" style="display: none;"></div>
                     </button>
                 </div>
             </div>
@@ -274,13 +316,13 @@
     </div>
 
     <!-- Confirmation Modal -->
-    <div id="confirmModal" class="modal hidden">
-        <div class="modal-content small">
+    <div id="confirmModal" class="modal">
+        <div class="modal-content confirm-modal">
             <div class="modal-header">
-                <h2>Confirm Action</h2>
+                <h2 id="confirmTitle">Confirm Action</h2>
             </div>
             <div class="modal-body">
-                <p id="confirmMessage"></p>
+                <p id="confirmMessage">Are you sure you want to proceed?</p>
             </div>
             <div class="modal-footer">
                 <button type="button" id="confirmCancel" class="btn btn-outline">Cancel</button>
@@ -289,21 +331,12 @@
         </div>
     </div>
 
-    <!-- Loading Overlay -->
-    <div id="loadingOverlay" class="loading-overlay hidden">
-        <div class="loading-spinner">
-            <i class="fas fa-spinner fa-spin"></i>
-            <p>Loading...</p>
-        </div>
-    </div>
+    <!-- Toast Notifications -->
+    <div id="toastContainer" class="toast-container"></div>
 
     <!-- Scripts -->
-    <script type="module">
-        import { createClient } from 'https://cdn.skypack.dev/@supabase/supabase-js@2'
-        window.supabase = { createClient }
-        console.log('Supabase loaded via Skypack')
-    </script>
-    <script src="config.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.29.0/feather.min.js"></script>
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
     <script src="script.js"></script>
 </body>
 </html>
