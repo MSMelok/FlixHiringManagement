@@ -17,14 +17,18 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
 body {
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
     font-size: 16px;
-    line-height: 1.5;
+    line-height: 1.6;
     background-color: var(--bg-primary);
     color: var(--text-primary);
+    font-weight: 400;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
 /* Utility Classes */
@@ -59,13 +63,18 @@ body {
 .login-card h1 {
     color: var(--accent);
     margin-bottom: 8px;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
     font-size: 24px;
     font-weight: 600;
+    letter-spacing: -0.5px;
 }
 
 .login-card p {
     color: var(--text-secondary);
     margin-bottom: 32px;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-weight: 400;
+    letter-spacing: 0.25px;
 }
 
 .form-group {
@@ -76,8 +85,11 @@ body {
 .form-group label {
     display: block;
     margin-bottom: 8px;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
     font-weight: 500;
+    font-size: 14px;
     color: var(--text-primary);
+    letter-spacing: 0.25px;
 }
 
 .form-group input,
@@ -87,10 +99,12 @@ body {
     padding: 12px;
     border: 1px solid var(--border);
     border-radius: 8px;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
     font-size: 14px;
+    font-weight: 400;
     background-color: var(--bg-primary);
     color: var(--text-primary);
-    transition: border-color 0.2s, box-shadow 0.2s;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 .form-group input:focus,
@@ -116,14 +130,17 @@ body {
     padding: 12px 24px;
     border: none;
     border-radius: 8px;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
     font-size: 14px;
     font-weight: 500;
+    letter-spacing: 0.5px;
     cursor: pointer;
-    transition: all 0.2s;
+    transition: all 0.2s ease-in-out;
     display: inline-flex;
     align-items: center;
     gap: 8px;
     text-decoration: none;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .btn-primary {
@@ -233,8 +250,10 @@ body {
 
 .header h1 {
     color: var(--accent);
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
     font-size: 20px;
     font-weight: 600;
+    letter-spacing: -0.5px;
 }
 
 .header-actions {
@@ -291,15 +310,20 @@ body {
 }
 
 .card-content h3 {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
     font-size: 28px;
     font-weight: 700;
     margin-bottom: 4px;
     color: var(--text-primary);
+    letter-spacing: -1px;
 }
 
 .card-content p {
     color: var(--text-secondary);
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
     font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 0.25px;
 }
 
 /* Filters */
@@ -350,6 +374,7 @@ body {
     padding: 16px;
     text-align: left;
     border-bottom: 1px solid var(--border);
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
 .applicants-table th {
@@ -357,11 +382,15 @@ body {
     font-weight: 600;
     color: var(--text-primary);
     font-size: 14px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
 }
 
 .applicants-table td {
     font-size: 14px;
+    font-weight: 400;
     color: var(--text-primary);
+    line-height: 1.5;
 }
 
 .applicants-table tr:hover {
@@ -371,8 +400,11 @@ body {
 .status-badge {
     padding: 4px 12px;
     border-radius: 20px;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
     font-size: 12px;
     font-weight: 500;
+    letter-spacing: 0.25px;
+    text-transform: uppercase;
 }
 
 .status-ok {
@@ -475,9 +507,11 @@ body {
 }
 
 .modal-header h2 {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
     font-size: 20px;
     color: var(--text-primary);
     font-weight: 600;
+    letter-spacing: -0.25px;
 }
 
 .modal-close {
