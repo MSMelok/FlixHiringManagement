@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HR Recruitment Dashboard</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Login Screen -->
+    <div id="loginScreen" class="screen">
+        <div class="login-container">
+            <div class="login-card">
+                <h1><i class="fas fa-users"></i> HR Recruitment Dashboard</h1>
+                <p>Please sign in to access the dashboard</p>
+                <form id="loginForm">
+                    <div class="form-group">
+                        <label for="loginEmail">Email Address</label>
+                        <input type="email" id="loginEmail" required placeholder="Enter your email">
+                    </div>
+                    <div class="form-group">
+                        <label for="loginPassword">Password</label>
+                        <input type="password" id="loginPassword" required placeholder="Enter your password">
+                    </div>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-sign-in-alt"></i> Sign In
+                    </button>
+                </form>
+                <div class="divider">
+                    <span>or</span>
+                </div>
+                <button id="magicLinkBtn" class="btn btn-secondary">
+                    <i class="fas fa-magic"></i> Send Magic Link
+                </button>
+                <div id="loginMessage" class="message"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Dashboard Screen -->
+    <div id="dashboardScreen" class="screen hidden">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <h1><i class="fas fa-users"></i> HR Recruitment Dashboard</h1>
+                <div class="header-actions">
+                    <button id="addApplicantBtn" class="btn btn-primary">
+                        <i class="fas fa-plus"></i> Add Applicant
+                    </button>
+                    <button id="exportBtn" class="btn btn-secondary">
+                        <i class="fas fa-download"></i> Export Data
+                    </button>
+                    <button id="logoutBtn" class="btn btn-outline">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Summary Cards -->
+        <div class="summary-cards">
+            <div class="card">
+                <div class="card-icon">
+                    <i class="fas fa-users"></i>
+                </div>
+                <div class="card-content">
+                    <h3 id="totalApplicants">0</h3>
+                    <p>Total Applicants</p>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-icon due">
+                    <i class="fas fa-clock"></i>
+                </div>
+                <div class="card-content">
+                    <h3 id="dueMeetings">0</h3>
+                    <p>Due Meetings</p>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-icon overdue">
+                    <i class="fas fa-exclamation-triangle"></i>
+                </div>
+                <div class="card-content">
+                    <h3 id="overdueMeetings">0</h3>
+                    <p>Overdue Meetings</p>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-icon stalled">
+                    <i class="fas fa-pause"></i>
+                </div>
+                <div class="card-content">
+                    <h3 id="stalledApplicants">0</h3>
+                    <p>Stalled Applicants</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Filters -->
+        <div class="filters">
+            <div class="filter-group">
+                <input type="text" id="searchInput" placeholder="Search by name or email...">
+                <select id="stageFilter">
+                    <option value="">All Stages</option>
+                    <option value="challenge_email">Challenge Email</option>
+                    <option value="equipment_email">Equipment Email</option>
+                    <option value="first_interview">First Interview</option>
+                    <option value="sales_mock">Sales Mock</option>
+                    <option value="slack_mock">Slack Mock</option>
+                    <option value="hired">Hired</option>
+                    <option value="rejected">Rejected</option>
+                </select>
+                <select id="statusFilter">
+                    <option value="">All Status</option>
+                    <option value="due">Due</option>
+                    <option value="overdue">Overdue</option>
+                    <option value="stalled">Stalled</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Applicants Table -->
+        <div class="table-container">
+            <table class="applicants-table">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>US Name</th>
+                        <th>Current Stage</th>
+                        <th>Next Meeting</th>
+                        <th>Status</th>
+                        <th>Last Updated</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="applicantsTableBody">
+                    <!-- Dynamic content -->
+                </tbody>
+            </table>
+            <div id="emptyState" class="empty-state hidden">
+                <i class="fas fa-inbox"></i>
+                <h3>No applicants found</h3>
+                <p>Start by adding your first applicant to the system.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Applicant Modal -->
+    <div id="applicantModal" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle">Add New Applicant</h2>
+                <button class="modal-close" id="closeModal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="applicantForm">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="fullName">Full Name *</label>
+                            <input type="text" id="fullName" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email *</label>
+                            <input type="email" id="email" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="dob">Date of Birth</label>
+                            <input type="date" id="dob">
+                        </div>
+                        <div class="form-group">
+                            <label for="usName">US Name</label>
+                            <input type="text" id="usName">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="currentStage">Current Stage</label>
+                        <select id="currentStage">
+                            <option value="challenge_email">Challenge Email</option>
+                            <option value="equipment_email">Equipment Email</option>
+                            <option value="first_interview">First Interview</option>
+                            <option value="sales_mock">Sales Mock</option>
+                            <option value="slack_mock">Slack Mock</option>
+                            <option value="hired">Hired</option>
+                            <option value="rejected">Rejected</option>
+                        </select>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="interviewFirstDate">First Interview Date</label>
+                            <input type="datetime-local" id="interviewFirstDate">
+                        </div>
+                        <div class="form-group">
+                            <label for="salesMockDate">Sales Mock Date</label>
+                            <input type="datetime-local" id="salesMockDate">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="slackMockDate">Slack Mock Date</label>
+                        <input type="datetime-local" id="slackMockDate">
+                    </div>
+                    <div class="form-group">
+                        <label for="notes">Notes</label>
+                        <textarea id="notes" rows="3"></textarea>
+                    </div>
+                </form>
+
+                <!-- Stage History Section -->
+                <div id="stageHistorySection" class="hidden">
+                    <h3>Stage History</h3>
+                    <div id="stageHistoryList"></div>
+                    
+                    <!-- Add Stage History -->
+                    <div class="add-history">
+                        <h4>Add Stage History Entry</h4>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="historyStage">Stage</label>
+                                <select id="historyStage">
+                                    <option value="challenge_email">Challenge Email</option>
+                                    <option value="equipment_email">Equipment Email</option>
+                                    <option value="first_interview">First Interview</option>
+                                    <option value="sales_mock">Sales Mock</option>
+                                    <option value="slack_mock">Slack Mock</option>
+                                    <option value="hired">Hired</option>
+                                    <option value="rejected">Rejected</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="historyResult">Result</label>
+                                <select id="historyResult">
+                                    <option value="Passed">Passed</option>
+                                    <option value="Failed">Failed</option>
+                                    <option value="Redo">Redo</option>
+                                    <option value="Fit">Fit</option>
+                                    <option value="NoFit">NoFit</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="historyComment">Comment (max 200 characters)</label>
+                            <textarea id="historyComment" maxlength="200" rows="2"></textarea>
+                            <div class="char-count">
+                                <span id="commentCharCount">0</span>/200
+                            </div>
+                        </div>
+                        <button type="button" id="addHistoryBtn" class="btn btn-secondary">
+                            <i class="fas fa-plus"></i> Add History Entry
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="deleteApplicantBtn" class="btn btn-danger hidden">
+                    <i class="fas fa-trash"></i> Delete Applicant
+                </button>
+                <div class="modal-actions">
+                    <button type="button" id="cancelBtn" class="btn btn-outline">Cancel</button>
+                    <button type="button" id="saveApplicantBtn" class="btn btn-primary">
+                        <i class="fas fa-save"></i> Save
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Confirmation Modal -->
+    <div id="confirmModal" class="modal hidden">
+        <div class="modal-content small">
+            <div class="modal-header">
+                <h2>Confirm Action</h2>
+            </div>
+            <div class="modal-body">
+                <p id="confirmMessage"></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="confirmCancel" class="btn btn-outline">Cancel</button>
+                <button type="button" id="confirmOk" class="btn btn-danger">Confirm</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div id="loadingOverlay" class="loading-overlay hidden">
+        <div class="loading-spinner">
+            <i class="fas fa-spinner fa-spin"></i>
+            <p>Loading...</p>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script type="module">
+        import { createClient } from 'https://cdn.skypack.dev/@supabase/supabase-js@2'
+        window.supabase = { createClient }
+        console.log('Supabase loaded via Skypack')
+    </script>
+    <script src="config.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
