@@ -4,8 +4,8 @@
 // Supabase Configuration
 // Replace these values with your actual Supabase project details
 window.SUPABASE_CONFIG = {
-    url: 'https://your-project-id.supabase.co',
-    anonKey: 'your-anon-key-here'
+    url: 'https://qsmpbfvgtcwgshbkjixy.supabase.co',
+    anonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFzbXBiZnZndGN3Z3NoYmtqaXh5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQzOTQzMzEsImV4cCI6MjA2OTk3MDMzMX0.pf1iwdgTbVfbryKK2F-10LhM_KlIwW0YS7hg-T94rjw'
 };
 
 // You can get these values from:
