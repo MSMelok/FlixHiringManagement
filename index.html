@@ -4,339 +4,326 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HR Recruitment Dashboard</title>
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>👔</text></svg>">
-    <link rel="stylesheet" href="styles.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&family=JetBrains+Mono:wght@300;400;500;600&display=swap" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.29.0/feather.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+    <!-- Loading Spinner -->
+    <div id="loading-spinner" class="loading-spinner">
+        <div class="spinner"></div>
+        <p>Loading...</p>
+    </div>
+
     <!-- Login Screen -->
-    <div id="loginScreen" class="login-screen">
+    <div id="login-screen" class="login-screen">
         <div class="login-container">
             <div class="login-header">
+                <i class="bi bi-person-badge-fill"></i>
                 <h1>HR Recruitment Dashboard</h1>
-                <p>Sign in to access your recruitment pipeline</p>
+                <p>Sign in to access your recruitment portal</p>
             </div>
-            <form id="loginForm" class="login-form">
+            <form id="login-form" class="login-form">
                 <div class="form-group">
-                    <label for="loginEmail">Email Address</label>
-                    <input type="email" id="loginEmail" required placeholder="Enter your email">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" name="email" required>
                 </div>
                 <div class="form-group">
-                    <label for="loginPassword">Password</label>
-                    <input type="password" id="loginPassword" required placeholder="Enter your password">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" required>
                 </div>
-                <button type="submit" id="loginBtn" class="btn btn-primary">
-                    <span class="btn-text">Sign In</span>
-                    <div class="spinner" style="display: none;"></div>
+                <button type="submit" class="btn-primary">
+                    <i class="bi bi-box-arrow-in-right"></i>
+                    Sign In
                 </button>
             </form>
+            <div id="login-error" class="error-message"></div>
         </div>
     </div>
 
-    <!-- Main Dashboard -->
-    <div id="dashboard" class="dashboard" style="display: none;">
-        <!-- Header -->
-        <header class="header">
-            <div class="header-content">
-                <h1>HR Recruitment Dashboard</h1>
-                <div class="header-actions">
-                    <button id="exportBtn" class="btn btn-secondary">
-                        <i data-feather="download"></i>
-                        Export Data
-                    </button>
-                    <button id="addApplicantBtn" class="btn btn-primary">
-                        <i data-feather="user-plus"></i>
+    <!-- Main Application -->
+    <div id="main-app" class="main-app">
+        <!-- Left Navigation -->
+        <nav class="sidebar">
+            <div class="sidebar-header">
+                <i class="bi bi-person-badge-fill"></i>
+                <h2>HR Portal</h2>
+            </div>
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="#" class="nav-link active" data-page="dashboard">
+                        <i class="bi bi-speedometer2"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link" data-page="applicants">
+                        <i class="bi bi-people-fill"></i>
+                        <span>Applicants</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link" data-page="export">
+                        <i class="bi bi-download"></i>
+                        <span>Export Data</span>
+                    </a>
+                </li>
+                <li class="nav-item logout">
+                    <a href="#" class="nav-link" id="logout-btn">
+                        <i class="bi bi-box-arrow-right"></i>
+                        <span>Logout</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Dashboard Page -->
+            <div id="dashboard-page" class="page active">
+                <div class="page-header">
+                    <h1>Dashboard Overview</h1>
+                    <p>Monitor your recruitment pipeline and candidate progress</p>
+                </div>
+                <div class="summary-cards" id="summary-cards">
+                    <!-- Cards will be dynamically generated -->
+                </div>
+                <div class="recent-activity">
+                    <h2>Recent Activity</h2>
+                    <div class="activity-list" id="recent-activity">
+                        <!-- Recent activity will be loaded here -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Applicants Page -->
+            <div id="applicants-page" class="page">
+                <div class="page-header">
+                    <h1>Applicants Management</h1>
+                    <button class="btn-primary" id="add-applicant-btn">
+                        <i class="bi bi-person-plus-fill"></i>
                         Add Applicant
                     </button>
-                    <button id="logoutBtn" class="btn btn-outline">
-                        <i data-feather="log-out"></i>
-                        Sign Out
-                    </button>
-                </div>
-            </div>
-        </header>
-
-        <!-- Summary Cards -->
-        <section class="summary-section">
-            <div class="summary-cards">
-                <div class="card summary-card">
-                    <div class="card-icon">
-                        <i data-feather="users"></i>
-                    </div>
-                    <div class="card-content">
-                        <h3 id="totalApplicants">0</h3>
-                        <p>Total Applicants</p>
-                    </div>
-                </div>
-                <div class="card summary-card warning">
-                    <div class="card-icon">
-                        <i data-feather="clock"></i>
-                    </div>
-                    <div class="card-content">
-                        <h3 id="dueMeetings">0</h3>
-                        <p>Due Meetings</p>
-                    </div>
-                </div>
-                <div class="card summary-card danger">
-                    <div class="card-icon">
-                        <i data-feather="alert-triangle"></i>
-                    </div>
-                    <div class="card-content">
-                        <h3 id="overdueMeetings">0</h3>
-                        <p>Overdue Meetings</p>
-                    </div>
-                </div>
-                <div class="card summary-card stale">
-                    <div class="card-icon">
-                        <i data-feather="pause-circle"></i>
-                    </div>
-                    <div class="card-content">
-                        <h3 id="stalledApplicants">0</h3>
-                        <p>Stalled Applicants</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Filters and Search -->
-        <section class="filters-section">
-            <div class="filters">
-                <div class="search-box">
-                    <i data-feather="search"></i>
-                    <input type="text" id="searchInput" placeholder="Search by name or email...">
-                </div>
-                <div class="filter-group">
-                    <select id="stageFilter">
-                        <option value="">All Stages</option>
-                        <option value="challenge_email">Challenge Email</option>
-                        <option value="equipment_email">Equipment Email</option>
-                        <option value="first_interview">First Interview</option>
-                        <option value="sales_mock">Sales Mock</option>
-                        <option value="slack_mock">Slack Mock</option>
-                        <option value="hired">Hired</option>
-                        <option value="rejected">Rejected</option>
-                    </select>
-                </div>
-                <div class="filter-group">
-                    <select id="statusFilter">
-                        <option value="">All Statuses</option>
-                        <option value="ok">OK</option>
-                        <option value="due">Due</option>
-                        <option value="overdue">Overdue</option>
-                        <option value="stalled">Stalled</option>
-                    </select>
-                </div>
-                <button id="clearFiltersBtn" class="btn btn-outline">
-                    <i data-feather="x"></i>
-                    Clear Filters
-                </button>
-            </div>
-        </section>
-
-        <!-- Applicants Table -->
-        <section class="table-section">
-            <div class="card">
-                <div class="table-header">
-                    <h2>Applicants</h2>
-                    <div class="table-actions">
-                        <button id="refreshBtn" class="btn btn-outline">
-                            <i data-feather="refresh-cw"></i>
-                            Refresh
-                        </button>
-                        <button id="clearAllBtn" class="btn btn-danger">
-                            <i data-feather="trash-2"></i>
-                            Clear All Data
-                        </button>
-                    </div>
                 </div>
                 <div class="table-container">
-                    <table id="applicantsTable" class="applicants-table">
+                    <table class="data-table" id="applicants-table">
                         <thead>
                             <tr>
-                                <th>Name</th>
+                                <th>Full Name</th>
                                 <th>Email</th>
                                 <th>US Name</th>
                                 <th>Current Stage</th>
-                                <th>Next Meeting</th>
+                                <th>Next Scheduled</th>
                                 <th>Status</th>
                                 <th>Last Updated</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
-                        <tbody id="applicantsTableBody">
-                            <!-- Dynamic content -->
+                        <tbody id="applicants-tbody">
+                            <!-- Applicant rows will be dynamically generated -->
                         </tbody>
                     </table>
-                    <div id="emptyState" class="empty-state" style="display: none;">
-                        <i data-feather="inbox"></i>
+                    <div id="no-applicants" class="empty-state">
+                        <i class="bi bi-people"></i>
                         <h3>No Applicants Found</h3>
-                        <p>Start by adding your first applicant to the system.</p>
-                        <button class="btn btn-primary">
-                            <i data-feather="user-plus"></i>
-                            Add First Applicant
+                        <p>Start by adding your first applicant to the system</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Export Page -->
+            <div id="export-page" class="page">
+                <div class="page-header">
+                    <h1>Export Data</h1>
+                    <p>Download your recruitment data in various formats</p>
+                </div>
+                <div class="export-options">
+                    <div class="export-card">
+                        <i class="bi bi-filetype-json"></i>
+                        <h3>JSON Export</h3>
+                        <p>Export all applicant data with complete history in JSON format</p>
+                        <button class="btn-primary" id="export-json-btn">
+                            <i class="bi bi-download"></i>
+                            Export JSON
+                        </button>
+                    </div>
+                    <div class="export-card">
+                        <i class="bi bi-filetype-csv"></i>
+                        <h3>CSV Export</h3>
+                        <p>Export applicant data in CSV format for spreadsheet analysis</p>
+                        <button class="btn-primary" id="export-csv-btn">
+                            <i class="bi bi-download"></i>
+                            Export CSV
                         </button>
                     </div>
                 </div>
             </div>
-        </section>
+        </main>
     </div>
 
-    <!-- Applicant Modal -->
-    <div id="applicantModal" class="modal">
+    <!-- Applicant View Modal -->
+    <div id="view-modal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
-                <h2 id="modalTitle">Add New Applicant</h2>
-                <button class="modal-close" id="modalClose">
-                    <i data-feather="x"></i>
+                <h2>Applicant Details</h2>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body" id="view-modal-body">
+                <!-- Content will be dynamically generated -->
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" id="edit-applicant-btn">
+                    <i class="bi bi-pencil-fill"></i>
+                    Edit
+                </button>
+                <button class="btn-danger" id="delete-applicant-btn">
+                    <i class="bi bi-trash-fill"></i>
+                    Delete
                 </button>
             </div>
+        </div>
+    </div>
+
+    <!-- Applicant Edit Modal -->
+    <div id="edit-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="edit-modal-title">Edit Applicant</h2>
+                <button class="modal-close">&times;</button>
+            </div>
             <div class="modal-body">
-                <form id="applicantForm">
-                    <div class="form-grid">
+                <form id="applicant-form">
+                    <div class="form-row">
                         <div class="form-group">
-                            <label for="fullName">Full Name *</label>
-                            <input type="text" id="fullName" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="email">Email *</label>
-                            <input type="email" id="email" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="usName">US Name</label>
-                            <input type="text" id="usName">
+                            <label for="full-name">Full Name</label>
+                            <input type="text" id="full-name" name="full_name" required>
                         </div>
                         <div class="form-group">
                             <label for="dob">Date of Birth</label>
-                            <input type="date" id="dob">
+                            <input type="date" id="dob" name="dob">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="applicant-email">Email</label>
+                            <input type="email" id="applicant-email" name="email" required>
                         </div>
                         <div class="form-group">
-                            <label for="currentStage">Current Stage</label>
-                            <select id="currentStage">
-                                <option value="challenge_email">Challenge Email</option>
-                                <option value="equipment_email">Equipment Email</option>
-                                <option value="first_interview">First Interview</option>
-                                <option value="sales_mock">Sales Mock</option>
-                                <option value="slack_mock">Slack Mock</option>
-                                <option value="hired">Hired</option>
-                                <option value="rejected">Rejected</option>
-                            </select>
+                            <label for="us-name">US Name</label>
+                            <input type="text" id="us-name" name="us_name">
                         </div>
                     </div>
-                    
-                    <div class="form-section">
-                        <h3>Interview Scheduling</h3>
-                        <div class="form-grid">
-                            <div class="form-group">
-                                <label for="interviewFirstDate">First Interview</label>
-                                <input type="datetime-local" id="interviewFirstDate">
-                            </div>
-                            <div class="form-group">
-                                <label for="salesMockDate">Sales Mock</label>
-                                <input type="datetime-local" id="salesMockDate">
-                            </div>
-                            <div class="form-group">
-                                <label for="slackMockDate">Slack Mock</label>
-                                <input type="datetime-local" id="slackMockDate">
-                            </div>
+                    <div class="form-group">
+                        <label for="current-stage">Current Stage</label>
+                        <select id="current-stage" name="current_stage" required>
+                            <option value="challenge_email">Challenge Email</option>
+                            <option value="equipment_email">Equipment Email</option>
+                            <option value="first_interview">First Interview</option>
+                            <option value="sales_mock">Sales Mockup</option>
+                            <option value="slack_mock">Slack Mock Call</option>
+                            <option value="hired">Hired</option>
+                            <option value="rejected">Rejected</option>
+                        </select>
+                    </div>
+                    <div class="scheduled-dates">
+                        <h3>Scheduled Dates</h3>
+                        <div id="interview-schedule" class="form-group">
+                            <label for="interview-date">Interview Date</label>
+                            <input type="datetime-local" id="interview-date" name="interview_date">
+                        </div>
+                        <div id="sales-mock-schedule" class="form-group">
+                            <label for="sales-mock-date">Sales Mock Date</label>
+                            <input type="datetime-local" id="sales-mock-date" name="sales_mock_date">
+                        </div>
+                        <div id="slack-mock-schedule" class="form-group">
+                            <label for="slack-mock-date">Slack Mock Date</label>
+                            <input type="datetime-local" id="slack-mock-date" name="slack_mock_date">
                         </div>
                     </div>
-
-                    <div class="form-section">
-                        <h3>Notes</h3>
+                    <div class="form-group">
+                        <label for="notes">Notes</label>
+                        <textarea id="notes" name="notes" rows="4"></textarea>
+                    </div>
+                    <div class="stage-history">
+                        <h3>Add Stage History Entry</h3>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="history-stage">Stage</label>
+                                <select id="history-stage">
+                                    <option value="">Select Stage</option>
+                                    <option value="challenge_email">Challenge Email</option>
+                                    <option value="equipment_email">Equipment Email</option>
+                                    <option value="first_interview">First Interview</option>
+                                    <option value="sales_mock">Sales Mockup</option>
+                                    <option value="slack_mock">Slack Mock Call</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="history-result">Result</label>
+                                <select id="history-result">
+                                    <option value="">Select Result</option>
+                                    <option value="passed">Passed</option>
+                                    <option value="failed">Failed</option>
+                                    <option value="pending">Pending</option>
+                                </select>
+                            </div>
+                        </div>
                         <div class="form-group">
-                            <label for="notes">Notes</label>
-                            <textarea id="notes" rows="4" placeholder="Add any relevant notes..."></textarea>
+                            <label for="history-comment">Comment (max 200 characters)</label>
+                            <textarea id="history-comment" maxlength="200" rows="2"></textarea>
+                            <small class="char-count">0/200</small>
                         </div>
-                    </div>
-
-                    <div class="form-section" id="historySection" style="display: none;">
-                        <h3>Stage History</h3>
-                        <div id="stageHistory" class="stage-history">
-                            <!-- Dynamic content -->
-                        </div>
-                        
-                        <div class="add-history">
-                            <h4>Add Stage History Entry</h4>
-                            <div class="form-grid">
-                                <div class="form-group">
-                                    <label for="historyStage">Stage</label>
-                                    <select id="historyStage">
-                                        <option value="challenge_email">Challenge Email</option>
-                                        <option value="equipment_email">Equipment Email</option>
-                                        <option value="first_interview">First Interview</option>
-                                        <option value="sales_mock">Sales Mock</option>
-                                        <option value="slack_mock">Slack Mock</option>
-                                        <option value="hired">Hired</option>
-                                        <option value="rejected">Rejected</option>
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label for="historyResult">Result</label>
-                                    <select id="historyResult">
-                                        <option value="Passed">Passed</option>
-                                        <option value="Failed">Failed</option>
-                                        <option value="Redo">Redo</option>
-                                        <option value="Fit">Fit</option>
-                                        <option value="NoFit">No Fit</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label for="historyComment">Comment (max 200 chars)</label>
-                                <textarea id="historyComment" maxlength="200" rows="3" placeholder="Add a comment..."></textarea>
-                                <div class="char-count">
-                                    <span id="commentCharCount">0</span>/200
-                                </div>
-                            </div>
-                            <button type="button" id="addHistoryBtn" class="btn btn-secondary">
-                                <i data-feather="plus"></i>
-                                Add History Entry
-                            </button>
-                        </div>
+                        <button type="button" class="btn-secondary" id="add-history-btn">
+                            <i class="bi bi-plus-circle"></i>
+                            Add History Entry
+                        </button>
                     </div>
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" id="deleteApplicantBtn" class="btn btn-danger" style="display: none;">
-                    <i data-feather="trash-2"></i>
-                    Delete Applicant
+                <button class="btn-secondary" id="cancel-edit-btn">Cancel</button>
+                <button class="btn-primary" id="save-applicant-btn">
+                    <i class="bi bi-check-circle-fill"></i>
+                    Save Changes
                 </button>
-                <div class="modal-actions">
-                    <button type="button" id="cancelBtn" class="btn btn-outline">Cancel</button>
-                    <button type="button" id="saveApplicantBtn" class="btn btn-primary">
-                        <span class="btn-text">Save Applicant</span>
-                        <div class="spinner" style="display: none;"></div>
-                    </button>
-                </div>
             </div>
         </div>
     </div>
 
     <!-- Confirmation Modal -->
-    <div id="confirmModal" class="modal">
-        <div class="modal-content confirm-modal">
+    <div id="confirm-modal" class="modal">
+        <div class="modal-content">
             <div class="modal-header">
-                <h2 id="confirmTitle">Confirm Action</h2>
+                <h2 id="confirm-title">Confirm Action</h2>
+                <button class="modal-close">&times;</button>
             </div>
             <div class="modal-body">
-                <p id="confirmMessage">Are you sure you want to proceed?</p>
+                <p id="confirm-message"></p>
             </div>
             <div class="modal-footer">
-                <button type="button" id="confirmCancel" class="btn btn-outline">Cancel</button>
-                <button type="button" id="confirmOk" class="btn btn-danger">Confirm</button>
+                <button class="btn-secondary" id="confirm-cancel">Cancel</button>
+                <button class="btn-danger" id="confirm-proceed">Confirm</button>
             </div>
         </div>
     </div>
 
-    <!-- Toast Notifications -->
-    <div id="toastContainer" class="toast-container"></div>
+    <!-- Success/Error Toast -->
+    <div id="toast" class="toast">
+        <div class="toast-content">
+            <span id="toast-message"></span>
+            <button class="toast-close">&times;</button>
+        </div>
+    </div>
 
     <!-- Scripts -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.29.0/feather.min.js"></script>
-    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="config.js"></script>
+    <script src="auth.js"></script>
+    <script src="dashboard.js"></script>
+    <script src="applicants.js"></script>
+    <script src="export.js"></script>
     <script src="script.js"></script>
 </body>
 </html>
