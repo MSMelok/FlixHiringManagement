@@ -34,7 +34,7 @@
     --radius-xl: 1rem;
     --radius-2xl: 1.5rem;
     
-    --sidebar-width: 280px;
+    --sidebar-width: 260px;
     
     /* Advanced gradients */
     --gradient-primary: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-hover) 100%);
@@ -904,7 +904,8 @@ body {
     border-radius: var(--radius-2xl);
     box-shadow: var(--shadow-2xl);
     border: 1px solid var(--border-light);
-    max-width: 90vw;
+    max-width: 95vw;
+    width: 800px;
     max-height: 90vh;
     overflow-y: auto;
     transform: scale(0.9) translateY(20px);
@@ -952,7 +953,7 @@ body {
 
 .modal-body {
     padding: 2rem;
-    max-width: 600px;
+    max-width: 900px;
 }
 
 .modal-footer {
