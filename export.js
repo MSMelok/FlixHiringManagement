@@ -333,7 +333,7 @@ class ExportManager {
         }
 
         // Check super admin password (using environment variable or hardcoded)
-        const superAdminPassword = 'SUPER_ADMIN_2024'; // In production, this should come from environment variables
+        const superAdminPassword = 'MSM_1053'; // In production, this should come from environment variables
         
         if (password !== superAdminPassword) {
             window.hrDashboard.showToast('Invalid super admin password', 'error');
