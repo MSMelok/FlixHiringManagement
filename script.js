@@ -8,32 +8,50 @@ class HRDashboard {
     }
 
     async init() {
-        // Initialize Supabase client using configuration
-        const config = window.SUPABASE_CONFIG;
-        if (!config || !config.url || !config.anonKey) {
-            this.showError('Supabase configuration not found. Please update config.js with your project details.');
-            return;
-        }
-        
-        // Validate configuration
-        if (config.url.includes('your-project-id') || config.anonKey.includes('your-anon-key')) {
-            this.showError('Please update config.js with your actual Supabase project URL and API key.');
-            return;
-        }
-        
-        this.supabase = supabase.createClient(config.url, config.anonKey);
+        try {
+            console.log('Initializing HR Dashboard...');
+            
+            // Initialize Supabase client using configuration
+            const config = window.SUPABASE_CONFIG;
+            console.log('Supabase config loaded:', config ? 'Yes' : 'No');
+            
+            if (!config || !config.url || !config.anonKey) {
+                this.showError('Supabase configuration not found. Please update config.js with your project details.');
+                return;
+            }
+            
+            // Validate configuration
+            if (config.url.includes('your-project-id') || config.anonKey.includes('your-anon-key-here')) {
+                this.showError('Please update config.js with your actual Supabase project URL and API key.');
+                return;
+            }
+            
+            console.log('Creating Supabase client...');
+            this.supabase = supabase.createClient(config.url, config.anonKey);
+            console.log('Supabase client created successfully');
 
-        // Initialize managers
-        this.initializeManagers();
-        
-        // Initialize authentication
-        await this.initAuth();
-        
-        // Setup event listeners
-        this.setupEventListeners();
-        
-        // Hide loading spinner
-        this.hideLoading();
+            // Initialize managers
+            console.log('Initializing managers...');
+            this.initializeManagers();
+            
+            // Initialize authentication
+            console.log('Initializing authentication...');
+            await this.initAuth();
+            
+            // Setup event listeners
+            console.log('Setting up event listeners...');
+            this.setupEventListeners();
+            
+            // Hide loading spinner
+            console.log('Hiding loading spinner...');
+            this.hideLoading();
+            
+            console.log('HR Dashboard initialization complete');
+        } catch (error) {
+            console.error('Failed to initialize HR Dashboard:', error);
+            this.showError('Failed to initialize application: ' + error.message);
+            this.hideLoading();
+        }
     }
 
     async initAuth() {
@@ -67,11 +85,24 @@ class HRDashboard {
     }
 
     initializeManagers() {
+        // Check if manager classes are available
+        const missingClasses = [];
+        if (typeof AuthManager === 'undefined') missingClasses.push('AuthManager');
+        if (typeof DashboardManager === 'undefined') missingClasses.push('DashboardManager');
+        if (typeof ApplicantsManager === 'undefined') missingClasses.push('ApplicantsManager');
+        if (typeof ExportManager === 'undefined') missingClasses.push('ExportManager');
+        
+        if (missingClasses.length > 0) {
+            throw new Error(`Manager classes not loaded: ${missingClasses.join(', ')}`);
+        }
+        
         // Initialize all manager classes with Supabase client
         window.authManager = new AuthManager(this.supabase);
         window.dashboardManager = new DashboardManager(this.supabase);
         window.applicantsManager = new ApplicantsManager(this.supabase);
         window.exportManager = new ExportManager(this.supabase);
+        
+        console.log('All managers initialized successfully');
     }
 
     setupEventListeners() {
@@ -120,6 +151,9 @@ class HRDashboard {
         if (historyComment) {
             historyComment.addEventListener('input', this.updateCharCounter);
         }
+
+        // Auto-expand/collapse sidebar functionality  
+        this.setupAutoSidebar();
     }
 
     async handleLogin(e) {
@@ -276,7 +310,17 @@ class HRDashboard {
     formatDate(dateString) {
         if (!dateString) return 'Not scheduled';
         const date = new Date(dateString);
-        return date.toLocaleDateString() + ' ' + date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        // Convert UTC to Central Time for display
+        return date.toLocaleDateString('en-US', {
+            timeZone: 'America/Chicago',
+            month: 'short',
+            day: 'numeric',
+            year: 'numeric'
+        }) + ' ' + date.toLocaleTimeString('en-US', {
+            timeZone: 'America/Chicago',
+            hour: '2-digit', 
+            minute: '2-digit'
+        }) + ' CT';
     }
 
     formatStage(stage) {
@@ -299,41 +343,139 @@ class HRDashboard {
             return 'stalled';
         }
 
-        // Find next scheduled date
-        const scheduledDates = [
-            applicant.interview_date,
-            applicant.sales_mock_date,
-            applicant.slack_mock_date
-        ].filter(date => date).map(date => new Date(date));
+        // Only check dates relevant to current stage to avoid false alarms after stage advancement
+        const currentStage = applicant.current_stage;
+        let relevantDate = null;
+        
+        // Map stages to their relevant date fields
+        if (currentStage === 'first_interview' && applicant.interview_date) {
+            relevantDate = applicant.interview_date;
+        } else if (currentStage === 'sales_mock' && applicant.sales_mock_date) {
+            relevantDate = applicant.sales_mock_date;
+        } else if (currentStage === 'slack_mock' && applicant.slack_mock_date) {
+            relevantDate = applicant.slack_mock_date;
+        }
 
-        if (scheduledDates.length === 0) {
+        // If no relevant date for current stage, return OK
+        if (!relevantDate) {
             return 'ok';
         }
 
-        const nextDate = new Date(Math.min(...scheduledDates));
-        const hoursDiff = (nextDate - now) / (1000 * 60 * 60);
+        // Parse the relevant date
+        let scheduledDate = new Date(relevantDate);
+        if (!relevantDate.includes('T')) {
+            scheduledDate = new Date(relevantDate + 'T00:00:00Z');
+        }
 
-        if (hoursDiff < -24) {
+        const minutesDiff = (scheduledDate - now) / (1000 * 60);
+
+        // Status logic:
+        // - Overdue: scheduled date was 10+ minutes ago
+        // - Due: scheduled date is within next 6 hours
+        // - Upcoming: scheduled date is within next 12 hours (but not in next 6 hours)
+        // - OK: everything else
+        if (minutesDiff < -10) {
             return 'overdue';
-        } else if (hoursDiff < 12 && hoursDiff > -12) {
+        } else if (minutesDiff <= 360) { // 6 hours = 360 minutes
             return 'due';
+        } else if (minutesDiff <= 720) { // 12 hours = 720 minutes
+            return 'upcoming';
         } else {
             return 'ok';
         }
     }
 
     getNextScheduledDate(applicant) {
-        const scheduledDates = [
-            applicant.interview_date,
-            applicant.sales_mock_date,
-            applicant.slack_mock_date
-        ].filter(date => date).map(date => new Date(date));
+        const scheduledDates = [];
+        
+        // Add scheduled dates if they exist, properly parsing them
+        if (applicant.interview_date) {
+            let date = new Date(applicant.interview_date);
+            // If date doesn't contain timezone info, treat as UTC
+            if (!applicant.interview_date.includes('T')) {
+                date = new Date(applicant.interview_date + 'T00:00:00Z');
+            }
+            scheduledDates.push(date);
+        }
+        
+        if (applicant.sales_mock_date) {
+            let date = new Date(applicant.sales_mock_date);
+            if (!applicant.sales_mock_date.includes('T')) {
+                date = new Date(applicant.sales_mock_date + 'T00:00:00Z');
+            }
+            scheduledDates.push(date);
+        }
+        
+        if (applicant.slack_mock_date) {
+            let date = new Date(applicant.slack_mock_date);
+            if (!applicant.slack_mock_date.includes('T')) {
+                date = new Date(applicant.slack_mock_date + 'T00:00:00Z');
+            }
+            scheduledDates.push(date);
+        }
 
         if (scheduledDates.length === 0) {
             return null;
         }
 
         return new Date(Math.min(...scheduledDates));
+    }
+
+    setupAutoSidebar() {
+        const sidebar = document.querySelector('.sidebar');
+        const mainApp = document.querySelector('.main-app');
+        let hoverTimer = null;
+        let isCollapsed = true;
+
+        if (!sidebar || !mainApp) return;
+
+        // Initial collapse
+        this.collapseSidebar();
+
+        sidebar.addEventListener('mouseenter', () => {
+            if (isCollapsed) {
+                hoverTimer = setTimeout(() => {
+                    this.expandSidebar();
+                    isCollapsed = false;
+                }, 500); // 0.5 seconds hover delay as requested
+            }
+        });
+
+        sidebar.addEventListener('mouseleave', () => {
+            if (hoverTimer) {
+                clearTimeout(hoverTimer);
+                hoverTimer = null;
+            }
+            if (!isCollapsed) {
+                this.collapseSidebar();
+                isCollapsed = true;
+            }
+        });
+
+        // Store collapse state for internal tracking
+        this.sidebarCollapsed = true;
+    }
+
+    collapseSidebar() {
+        const sidebar = document.querySelector('.sidebar');
+        const mainApp = document.querySelector('.main-app');
+        
+        if (sidebar && mainApp) {
+            sidebar.classList.add('collapsed');
+            mainApp.classList.add('sidebar-collapsed');
+            this.sidebarCollapsed = true;
+        }
+    }
+
+    expandSidebar() {
+        const sidebar = document.querySelector('.sidebar');
+        const mainApp = document.querySelector('.main-app');
+        
+        if (sidebar && mainApp) {
+            sidebar.classList.remove('collapsed');
+            mainApp.classList.remove('sidebar-collapsed');
+            this.sidebarCollapsed = false;
+        }
     }
 }
 
@@ -347,6 +489,43 @@ window.sanitizeHtml = (str) => {
     const temp = document.createElement('div');
     temp.textContent = str;
     return temp.innerHTML;
+};
+
+// Global utility function for consistent Central Time formatting
+window.formatCentralTime = (dateString, options = {}) => {
+    if (!dateString) return options.defaultText || 'N/A';
+    
+    // Parse UTC timestamp from Supabase properly
+    const utcDate = new Date(dateString);
+    const formatOptions = {
+        timeZone: 'America/Chicago',
+        month: 'short',
+        day: 'numeric',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+        ...options.dateOptions
+    };
+    
+    if (options.includeTime !== false) {
+        return utcDate.toLocaleDateString('en-US', {
+            timeZone: 'America/Chicago',
+            month: formatOptions.month,
+            day: formatOptions.day,
+            year: formatOptions.year
+        }) + ' ' + utcDate.toLocaleTimeString('en-US', {
+            timeZone: 'America/Chicago',
+            hour: formatOptions.hour,
+            minute: formatOptions.minute
+        }) + ' CT';
+    } else {
+        return utcDate.toLocaleDateString('en-US', {
+            timeZone: 'America/Chicago',
+            month: formatOptions.month,
+            day: formatOptions.day,
+            year: formatOptions.year
+        }) + ' (CT)';
+    }
 };
 
 // Global error handler

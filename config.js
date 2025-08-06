@@ -2,7 +2,7 @@
 // This file contains the Supabase configuration
 
 // Supabase Configuration
-// Replace these values with your actual Supabase project details
+// Replace these with your actual Supabase project credentials
 window.SUPABASE_CONFIG = {
     url: 'https://qsmpbfvgtcwgshbkjixy.supabase.co',
     anonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFzbXBiZnZndGN3Z3NoYmtqaXh5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQzOTQzMzEsImV4cCI6MjA2OTk3MDMzMX0.pf1iwdgTbVfbryKK2F-10LhM_KlIwW0YS7hg-T94rjw'
@@ -17,7 +17,7 @@ window.SUPABASE_CONFIG = {
 // Optional: Advanced configuration
 window.APP_CONFIG = {
     // Application settings
-    appName: 'HR Recruitment Dashboard',
+    appName: 'FlixAT HR Portal',
     version: '2.0.0',
     
     // Feature flags

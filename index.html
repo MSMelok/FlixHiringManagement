@@ -3,10 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HR Recruitment Dashboard</title>
+    <title>FlixAT HR Portal</title>
+    <link rel="icon" type="image/png" href="FlixAT.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
 </head>
@@ -22,7 +23,7 @@
         <div class="login-container">
             <div class="login-header">
                 <i class="bi bi-person-badge-fill"></i>
-                <h1>HR Recruitment Dashboard</h1>
+                <h1>FlixAT HR Portal</h1>
                 <p>Sign in to access your recruitment portal</p>
             </div>
             <form id="login-form" class="login-form">
@@ -49,29 +50,29 @@
         <nav class="sidebar">
             <div class="sidebar-header">
                 <i class="bi bi-person-badge-fill"></i>
-                <h2>HR Portal</h2>
+                <h2>FlixAT HR</h2>
             </div>
             <ul class="nav-menu">
                 <li class="nav-item">
-                    <a href="#" class="nav-link active" data-page="dashboard">
+                    <a href="#" class="nav-link active" data-page="dashboard" data-tooltip="Dashboard">
                         <i class="bi bi-speedometer2"></i>
                         <span>Dashboard</span>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="#" class="nav-link" data-page="applicants">
+                    <a href="#" class="nav-link" data-page="applicants" data-tooltip="Applicants">
                         <i class="bi bi-people-fill"></i>
                         <span>Applicants</span>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="#" class="nav-link" data-page="export">
+                    <a href="#" class="nav-link" data-page="export" data-tooltip="Export Data">
                         <i class="bi bi-download"></i>
                         <span>Export Data</span>
                     </a>
                 </li>
                 <li class="nav-item logout">
-                    <a href="#" class="nav-link" id="logout-btn">
+                    <a href="#" class="nav-link" id="logout-btn" data-tooltip="Logout">
                         <i class="bi bi-box-arrow-right"></i>
                         <span>Logout</span>
                     </a>
@@ -101,12 +102,118 @@
             <!-- Applicants Page -->
             <div id="applicants-page" class="page">
                 <div class="page-header">
-                    <h1>Applicants Management</h1>
+                    <div class="page-title-section">
+                        <h1>Applicants Management</h1>
+                        <p>Manage recruitment candidates and track their progress through the hiring pipeline</p>
+                    </div>
                     <button class="btn-primary" id="add-applicant-btn">
                         <i class="bi bi-person-plus-fill"></i>
                         Add Applicant
                     </button>
                 </div>
+
+                <!-- Search and Filter Section -->
+                <section class="search-filters-section" aria-label="Search and filter applicants">
+                    <h2 class="visually-hidden">Search and Filter Options</h2>
+
+                    <!-- Search Bar - Prominent placement -->
+                    <div class="search-container">
+                        <div class="search-input-wrapper">
+                            <i class="bi bi-search search-icon"></i>
+                            <input type="text" id="search-filter" class="search-input" placeholder="Search by name, email, US name, or country...">
+                        </div>
+                        <button class="btn-secondary clear-btn" id="clear-filters-btn">
+                            <i class="bi bi-x-circle"></i>
+                            Clear All
+                        </button>
+                    </div>
+
+                    <!-- Filter Categories -->
+                    <div class="filters-grid">
+                        <!-- Primary Filters -->
+                        <div class="filter-category">
+                            <h3 class="filter-category-title">
+                                <i class="bi bi-funnel"></i>
+                                Primary Filters
+                            </h3>
+                            <div class="filter-category-content">
+                                <div class="filter-group">
+                                    <label for="stage-filter">Stage:</label>
+                                    <select id="stage-filter">
+                                        <option value="">All Stages</option>
+                                        <option value="challenge_email">Challenge Email</option>
+                                        <option value="equipment_email">Equipment Email</option>
+                                        <option value="first_interview">First Interview</option>
+                                        <option value="sales_mock">Sales Mockup Calls</option>
+                                        <option value="slack_mock">Slack Mockup Calls</option>
+                                        <option value="hired">Hired</option>
+                                        <option value="rejected">Rejected</option>
+                                    </select>
+                                </div>
+                                <div class="filter-group">
+                                    <label for="status-filter">Status:</label>
+                                    <select id="status-filter">
+                                        <option value="">All Status</option>
+                                        <option value="ok">OK</option>
+                                        <option value="upcoming">Upcoming</option>
+                                        <option value="due">Due</option>
+                                        <option value="overdue">Overdue</option>
+                                        <option value="stalled">Stalled</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Date Range -->
+                        <div class="filter-category">
+                            <h3 class="filter-category-title">
+                                <i class="bi bi-calendar3"></i>
+                                Date Range
+                            </h3>
+                            <div class="filter-category-content">
+                                <div class="date-filter-row">
+                                    <div class="filter-group">
+                                        <label for="date-filter-start">From:</label>
+                                        <input type="date" id="date-filter-start">
+                                    </div>
+                                    <div class="filter-group">
+                                        <label for="date-filter-end">To:</label>
+                                        <input type="date" id="date-filter-end">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Additional Options -->
+                        <div class="filter-category">
+                            <h3 class="filter-category-title">
+                                <i class="bi bi-gear"></i>
+                                Additional Options
+                            </h3>
+                            <div class="filter-category-content">
+                                <div class="filter-group">
+                                    <label for="referred-by-filter">Referral Source:</label>
+                                    <select id="referred-by-filter">
+                                        <option value="">All Sources</option>
+                                        <!-- Referrals will be populated dynamically -->
+                                    </select>
+                                </div>
+                                <div class="filter-group">
+                                    <label for="sort-filter">Sort By:</label>
+                                    <select id="sort-filter">
+                                        <option value="updated-desc">Recently Updated</option>
+                                        <option value="name-asc">Name (A-Z)</option>
+                                        <option value="name-desc">Name (Z-A)</option>
+                                        <option value="age-asc">Age (Youngest First)</option>
+                                        <option value="age-desc">Age (Oldest First)</option>
+                                        <option value="created-desc">Newest First</option>
+                                        <option value="created-asc">Oldest First</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
                 <div class="table-container">
                     <table class="data-table" id="applicants-table">
                         <thead>
@@ -114,6 +221,8 @@
                                 <th>Full Name</th>
                                 <th>Email</th>
                                 <th>US Name</th>
+                                <th>Country</th>
+                                <th>Referred By</th>
                                 <th>Current Stage</th>
                                 <th>Next Scheduled</th>
                                 <th>Status</th>
@@ -136,27 +245,96 @@
             <!-- Export Page -->
             <div id="export-page" class="page">
                 <div class="page-header">
-                    <h1>Export Data</h1>
-                    <p>Download your recruitment data in various formats</p>
-                </div>
-                <div class="export-options">
-                    <div class="export-card">
-                        <i class="bi bi-filetype-json"></i>
-                        <h3>JSON Export</h3>
-                        <p>Export all applicant data with complete history in JSON format</p>
-                        <button class="btn-primary" id="export-json-btn">
-                            <i class="bi bi-download"></i>
-                            Export JSON
-                        </button>
+                    <div class="page-title-section">
+                        <h1>Export Data</h1>
+                        <p>Export your recruitment data in various formats or manage system data</p>
                     </div>
-                    <div class="export-card">
-                        <i class="bi bi-filetype-csv"></i>
-                        <h3>CSV Export</h3>
-                        <p>Export applicant data in CSV format for spreadsheet analysis</p>
-                        <button class="btn-primary" id="export-csv-btn">
-                            <i class="bi bi-download"></i>
-                            Export CSV
-                        </button>
+                </div>
+
+                <div class="export-sections">
+                    <!-- Data Export Section -->
+                    <div class="export-section">
+                        <div class="section-header">
+                            <h2><i class="bi bi-download"></i> Data Export</h2>
+                            <p>Download your recruitment data for backup or analysis</p>
+                        </div>
+                        <div class="export-options">
+                            <div class="export-card export">
+                                <div class="export-card-icon">
+                                    <i class="bi bi-file-earmark-code-fill"></i>
+                                </div>
+                                <div class="export-card-content">
+                                    <h3>JSON Export</h3>
+                                    <p>Complete data export including stage history and metadata. Ideal for system backups and integrations.</p>
+                                    <div class="export-features">
+                                        <span class="feature-tag">Complete Data</span>
+                                        <span class="feature-tag">Stage History</span>
+                                        <span class="feature-tag">Metadata</span>
+                                    </div>
+                                </div>
+                                <button id="export-json-btn" class="btn-primary">
+                                    <i class="bi bi-download"></i>
+                                    Export JSON
+                                </button>
+                            </div>
+
+                            <div class="export-card export">
+                                <div class="export-card-icon">
+                                    <i class="bi bi-file-earmark-spreadsheet-fill"></i>
+                                </div>
+                                <div class="export-card-content">
+                                    <h3>CSV Export</h3>
+                                    <p>Structured data export for spreadsheet analysis. Compatible with Excel, Google Sheets, and other tools.</p>
+                                    <div class="export-features">
+                                        <span class="feature-tag">Spreadsheet Ready</span>
+                                        <span class="feature-tag">Structured Data</span>
+                                        <span class="feature-tag">Analysis Ready</span>
+                                    </div>
+                                </div>
+                                <button id="export-csv-btn" class="btn-primary">
+                                    <i class="bi bi-download"></i>
+                                    Export CSV
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Data Management Section -->
+                    <div class="export-section danger-section">
+                        <div class="section-header">
+                            <h2><i class="bi bi-exclamation-triangle-fill"></i> Data Management</h2>
+                            <p>Advanced operations that require administrative privileges</p>
+                        </div>
+                        <div class="export-options">
+                            <div class="export-card danger">
+                                <div class="export-card-icon danger">
+                                    <i class="bi bi-trash3-fill"></i>
+                                </div>
+                                <div class="export-card-content">
+                                    <h3>Erase All Data</h3>
+                                    <p>Permanently delete all recruitment data from the system. This action cannot be undone.</p>
+                                    <div class="export-features">
+                                        <span class="feature-tag danger">Permanent</span>
+                                        <span class="feature-tag danger">CSV Required</span>
+                                        <span class="feature-tag danger">Admin Only</span>
+                                    </div>
+                                    <div class="requirements-list">
+                                        <div class="requirement-item">
+                                            <i class="bi bi-check-circle" id="csv-requirement-icon"></i>
+                                            <span id="csv-requirement-text">CSV export must be completed first</span>
+                                        </div>
+                                        <div class="requirement-item">
+                                            <i class="bi bi-shield-lock"></i>
+                                            <span>Super Admin password required</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button id="erase-data-btn" class="btn-danger" disabled>
+                                    <i class="bi bi-trash3"></i>
+                                    Erase All Data
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -174,14 +352,16 @@
                 <!-- Content will be dynamically generated -->
             </div>
             <div class="modal-footer">
-                <button class="btn-secondary" id="edit-applicant-btn">
-                    <i class="bi bi-pencil-fill"></i>
-                    Edit
-                </button>
-                <button class="btn-danger" id="delete-applicant-btn">
-                    <i class="bi bi-trash-fill"></i>
-                    Delete
-                </button>
+                <div class="applicant-actions">
+                    <button class="btn-secondary" id="edit-applicant-btn">
+                        <i class="bi bi-pencil-fill"></i>
+                        Edit
+                    </button>
+                    <button class="btn-danger" id="delete-applicant-btn">
+                        <i class="bi bi-trash-fill"></i>
+                        Delete
+                    </button>
+                </div>
             </div>
         </div>
     </div>
@@ -195,90 +375,78 @@
             </div>
             <div class="modal-body">
                 <form id="applicant-form">
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="full-name">Full Name</label>
-                            <input type="text" id="full-name" name="full_name" required>
+                    <div class="applicant-details">
+                        <div class="detail-section">
+                            <h3>Personal Information</h3>
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label for="full-name">Full Name</label>
+                                    <input type="text" id="full-name" name="full_name" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="dob">Date of Birth</label>
+                                    <input type="date" id="dob" name="dob">
+                                </div>
+                                <div class="form-group">
+                                    <label for="applicant-email">Email</label>
+                                    <input type="email" id="applicant-email" name="email" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="us-name">US Name</label>
+                                    <input type="text" id="us-name" name="us_name">
+                                </div>
+                                <div class="form-group">
+                                    <label for="country">Country</label>
+                                    <input type="text" id="country" name="country" placeholder="Enter country name">
+                                </div>
+                                <div class="form-group">
+                                    <label for="referred-by">Referred By</label>
+                                    <input type="text" id="referred-by" name="referred_by" placeholder="Who referred this applicant?">
+                                </div>
+                            </div>
                         </div>
-                        <div class="form-group">
-                            <label for="dob">Date of Birth</label>
-                            <input type="date" id="dob" name="dob">
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="applicant-email">Email</label>
-                            <input type="email" id="applicant-email" name="email" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="us-name">US Name</label>
-                            <input type="text" id="us-name" name="us_name">
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="current-stage">Current Stage</label>
-                        <select id="current-stage" name="current_stage" required>
-                            <option value="challenge_email">Challenge Email</option>
-                            <option value="equipment_email">Equipment Email</option>
-                            <option value="first_interview">First Interview</option>
-                            <option value="sales_mock">Sales Mockup</option>
-                            <option value="slack_mock">Slack Mock Call</option>
-                            <option value="hired">Hired</option>
-                            <option value="rejected">Rejected</option>
-                        </select>
-                    </div>
-                    <div class="scheduled-dates">
-                        <h3>Scheduled Dates</h3>
-                        <div id="interview-schedule" class="form-group">
-                            <label for="interview-date">Interview Date</label>
-                            <input type="datetime-local" id="interview-date" name="interview_date">
-                        </div>
-                        <div id="sales-mock-schedule" class="form-group">
-                            <label for="sales-mock-date">Sales Mock Date</label>
-                            <input type="datetime-local" id="sales-mock-date" name="sales_mock_date">
-                        </div>
-                        <div id="slack-mock-schedule" class="form-group">
-                            <label for="slack-mock-date">Slack Mock Date</label>
-                            <input type="datetime-local" id="slack-mock-date" name="slack_mock_date">
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="notes">Notes</label>
-                        <textarea id="notes" name="notes" rows="4"></textarea>
-                    </div>
-                    <div class="stage-history">
-                        <h3>Add Stage History Entry</h3>
-                        <div class="form-row">
+
+                        <div class="detail-section">
+                            <h3>Current Status</h3>
                             <div class="form-group">
-                                <label for="history-stage">Stage</label>
-                                <select id="history-stage">
-                                    <option value="">Select Stage</option>
+                                <label for="current-stage">Current Stage</label>
+                                <select id="current-stage" name="current_stage" required>
                                     <option value="challenge_email">Challenge Email</option>
                                     <option value="equipment_email">Equipment Email</option>
                                     <option value="first_interview">First Interview</option>
-                                    <option value="sales_mock">Sales Mockup</option>
-                                    <option value="slack_mock">Slack Mock Call</option>
+                                    <option value="sales_mock">Sales Mockup Calls</option>
+                                    <option value="slack_mock">Slack Mockup Calls</option>
+                                    <option value="hired">Hired</option>
+                                    <option value="rejected">Rejected</option>
                                 </select>
                             </div>
+                        </div>
+
+                        <div class="detail-section" id="scheduled-dates-section">
+                            <h3>Scheduled Dates</h3>
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label for="interview-date">Interview Date (Central Time):</label>
+                                    <input type="datetime-local" id="interview-date" name="interview_date">
+                                </div>
+                                <div class="form-group">
+                                    <label for="sales-mock-date">Sales Mockup Calls Date (Central Time):</label>
+                                    <input type="datetime-local" id="sales-mock-date" name="sales_mock_date">
+                                </div>
+                                <div class="form-group">
+                                    <label for="slack-mock-date">Slack Mockup Calls Date (Central Time):</label>
+                                    <input type="datetime-local" id="slack-mock-date" name="slack_mock_date">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="detail-section">
+                            <h3>Additional Notes</h3>
                             <div class="form-group">
-                                <label for="history-result">Result</label>
-                                <select id="history-result">
-                                    <option value="">Select Result</option>
-                                    <option value="passed">Passed</option>
-                                    <option value="failed">Failed</option>
-                                    <option value="pending">Pending</option>
-                                </select>
+                                <label for="notes">Notes</label>
+                                <textarea id="notes" name="notes" rows="4" placeholder="Add any additional information or comments..."></textarea>
                             </div>
                         </div>
-                        <div class="form-group">
-                            <label for="history-comment">Comment (max 200 characters)</label>
-                            <textarea id="history-comment" maxlength="200" rows="2"></textarea>
-                            <small class="char-count">0/200</small>
-                        </div>
-                        <button type="button" class="btn-secondary" id="add-history-btn">
-                            <i class="bi bi-plus-circle"></i>
-                            Add History Entry
-                        </button>
                     </div>
                 </form>
             </div>
@@ -287,6 +455,26 @@
                 <button class="btn-primary" id="save-applicant-btn">
                     <i class="bi bi-check-circle-fill"></i>
                     Save Changes
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Stage Transition Modal -->
+    <div id="stage-transition-modal" class="modal">
+        <div class="modal-content modal-lg">
+            <div class="modal-header">
+                <h2>Move Applicant to Different Stage</h2>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body" id="stage-transition-modal-body">
+                <!-- Content will be dynamically generated -->
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" id="cancel-stage-transition-btn">Cancel</button>
+                <button class="btn-primary" id="save-stage-transition-btn">
+                    <i class="bi bi-arrow-right-circle-fill"></i>
+                    Move Applicant
                 </button>
             </div>
         </div>
@@ -316,6 +504,51 @@
             <button class="toast-close">&times;</button>
         </div>
     </div>
+
+    <!-- Super Admin Password Modal -->
+    <div id="super-admin-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2><i class="bi bi-shield-exclamation"></i> Super Admin Verification</h2>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="warning-message">
+                    <i class="bi bi-exclamation-triangle-fill"></i>
+                    <h3>Danger Zone</h3>
+                    <p>You are about to permanently erase all recruitment data from the system. This action cannot be undone.</p>
+                    <ul>
+                        <li>All applicant records</li>
+                        <li>Complete stage history</li>
+                        <li>Activity logs</li>
+                        <li>Associated metadata</li>
+                    </ul>
+                </div>
+                <form id="super-admin-form">
+                    <div class="form-group">
+                        <label for="super-admin-password">Super Admin Password</label>
+                        <input type="password" id="super-admin-password" name="super-admin-password" required 
+                               placeholder="Enter super admin password">
+                    </div>
+                    <div class="form-group">
+                        <label for="confirmation-text">Type "ERASE ALL DATA" to confirm</label>
+                        <input type="text" id="confirmation-text" name="confirmation-text" required 
+                               placeholder="ERASE ALL DATA">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn-secondary" onclick="window.hrDashboard.closeModal('super-admin-modal')">
+                    Cancel
+                </button>
+                <button type="button" id="confirm-erase-btn" class="btn-danger">
+                    <i class="bi bi-trash3"></i>
+                    Confirm Erase
+                </button>
+            </div>
+        </div>
+    </div>
+
 
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>

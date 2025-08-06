@@ -14,6 +14,19 @@ class ExportManager {
         document.getElementById('export-csv-btn')?.addEventListener('click', () => {
             this.exportCSV();
         });
+
+        // Data erasure functionality
+        document.getElementById('erase-data-btn')?.addEventListener('click', () => {
+            this.initiateDataErasure();
+        });
+
+        document.getElementById('confirm-erase-btn')?.addEventListener('click', () => {
+            this.confirmDataErasure();
+        });
+
+        // Initialize erasure state
+        this.csvExported = false;
+        this.updateEraseButtonState();
     }
 
     async exportJSON() {
@@ -131,6 +144,10 @@ class ExportManager {
             );
 
             window.hrDashboard.showToast('CSV export completed successfully', 'success');
+            
+            // Mark CSV as exported and update erase button state
+            this.csvExported = true;
+            this.updateEraseButtonState();
 
         } catch (error) {
             console.error('CSV export error:', error);
@@ -195,8 +212,8 @@ class ExportManager {
             'challenge_email': 'Challenge Email',
             'equipment_email': 'Equipment Email',
             'first_interview': 'First Interview',
-            'sales_mock': 'Sales Mockup',
-            'slack_mock': 'Slack Mock Call',
+            'sales_mock': 'Sales Mockup Calls',
+            'slack_mock': 'Slack Mockup Calls',
             'hired': 'Hired',
             'rejected': 'Rejected'
         };
@@ -263,6 +280,127 @@ class ExportManager {
         } catch (error) {
             console.error('Stage history export error:', error);
             window.hrDashboard.showToast('Failed to export stage history', 'error');
+        }
+    }
+
+    updateEraseButtonState() {
+        const eraseBtn = document.getElementById('erase-data-btn');
+        const csvIcon = document.getElementById('csv-requirement-icon');
+        const csvText = document.getElementById('csv-requirement-text');
+        
+        if (eraseBtn && csvIcon && csvText) {
+            if (this.csvExported) {
+                eraseBtn.disabled = false;
+                csvIcon.classList.add('fulfilled');
+                csvText.textContent = 'CSV export completed ✓';
+                csvText.style.color = 'var(--success-color)';
+            } else {
+                eraseBtn.disabled = true;
+                csvIcon.classList.remove('fulfilled');
+                csvText.textContent = 'CSV export must be completed first';
+                csvText.style.color = 'var(--text-secondary)';
+            }
+        }
+    }
+
+    initiateDataErasure() {
+        if (!this.csvExported) {
+            window.hrDashboard.showToast('CSV export must be completed before data erasure', 'error');
+            return;
+        }
+
+        // Clear form
+        document.getElementById('super-admin-password').value = '';
+        document.getElementById('confirmation-text').value = '';
+        
+        // Show modal
+        window.hrDashboard.showModal('super-admin-modal');
+    }
+
+    async confirmDataErasure() {
+        const password = document.getElementById('super-admin-password').value;
+        const confirmation = document.getElementById('confirmation-text').value;
+
+        // Validate inputs
+        if (!password.trim()) {
+            window.hrDashboard.showToast('Super admin password is required', 'error');
+            return;
+        }
+
+        if (confirmation !== 'ERASE ALL DATA') {
+            window.hrDashboard.showToast('Confirmation text must match exactly: "ERASE ALL DATA"', 'error');
+            return;
+        }
+
+        // Check super admin password (using environment variable or hardcoded)
+        const superAdminPassword = 'SUPER_ADMIN_2024'; // In production, this should come from environment variables
+        
+        if (password !== superAdminPassword) {
+            window.hrDashboard.showToast('Invalid super admin password', 'error');
+            return;
+        }
+
+        try {
+            window.hrDashboard.showToast('Erasing all data...', 'error');
+
+            // Delete all stage history first (due to foreign key constraints)
+            const { error: historyError } = await this.supabase
+                .from('stage_history')
+                .delete()
+                .neq('id', 0); // Delete all records
+
+            if (historyError) throw historyError;
+
+            // Delete all recent activity if table exists
+            try {
+                const { error: activityError } = await this.supabase
+                    .from('recent_activity')
+                    .delete()
+                    .neq('id', 0); // Delete all records
+
+                // Ignore error if table doesn't exist
+                if (activityError && !activityError.message.includes('does not exist')) {
+                    throw activityError;
+                }
+            } catch (e) {
+                // Table might not exist, continue
+                console.warn('Recent activity table might not exist:', e);
+            }
+
+            // Delete all applicants
+            const { error: applicantsError } = await this.supabase
+                .from('applicants')
+                .delete()
+                .neq('id', 0); // Delete all records
+
+            if (applicantsError) throw applicantsError;
+
+            // Close modal
+            window.hrDashboard.closeModal('super-admin-modal');
+
+            // Show success message
+            window.hrDashboard.showToast('All data has been permanently erased', 'success');
+
+            // Reset CSV exported state
+            this.csvExported = false;
+            this.updateEraseButtonState();
+
+            // Refresh dashboard and applicants data
+            if (window.dashboardManager) {
+                await window.dashboardManager.loadData();
+            }
+            if (window.applicantsManager) {
+                await window.applicantsManager.loadData();
+            }
+
+            // Navigate to dashboard
+            if (window.hrDashboard) {
+                window.hrDashboard.showPage('dashboard');
+            }
+
+        } catch (error) {
+            console.error('Data erasure error:', error);
+            window.hrDashboard.showToast('Failed to erase data: ' + error.message, 'error');
         }
     }
 }
